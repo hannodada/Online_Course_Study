@@ -1,9 +1,10 @@
-package hello.core.discount;
+package hello.core.order;
 
+import hello.core.discount.DiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
 
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService {
     // private final MemberRepository memberRepository = new MemoryMemberRepository();
 
     // 할인 정책을 변경해주기 위해 수정이 필요해짐 -> OCP위반
