@@ -11,6 +11,22 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 // factory Method를 통해서 등록하는 방식
+
+/* @Configuration을 통해 싱글톤이 보장되는 방법 -> 이 어노테이션을 지우면 @Bean만으로는 싱글톤이 보장되지 않음
+@Bean
+public MemberRepository memberRepository() {
+
+     if (memoryMemberRepository가 이미 스프링 컨테이너에 등록되어 있으면?) {
+     return 스프링 컨테이너에서 찾아서 반환;
+     } else { //스프링 컨테이너에 없으면
+     기존 로직을 호출해서 MemoryMemberRepository를 생성하고 스프링 컨테이너에 등록
+     return 반환
+     }
+}
+*
+* */
+
+
 @Configuration
 public class AppConfig {
 
@@ -29,13 +45,24 @@ public class AppConfig {
      * 클라이언트인 memberServiceImple 입장에서 보면 의존 관계를 마치 외부에서 주입해주는 것과 같음
      * */
 
+    /* 스프링이 자동으로 관리해주는 싱글톤
+    *
+    * - 싱글톤이라면 MemoryMemberRepository가 한개만 생성되어야 하지만 코드상으로는 아래와 같이 여러개가 생성됨
+    *   @Bean memberService -> new MemoryMemberRepository()
+    *   @Bean orderService -> new MemoryMemberRepository()
+    *
+    * - 그렇다면 실제로는?
+    *  하나의 객체임
+    * */
     @Bean
     public MemberService memberService() {
+        System.out.println("call AppConfig.memberService");
         return new MemberServiceImpl(memberRepository());
     }
 
     @Bean
     public MemberRepository memberRepository() {
+        System.out.println("call AppConfig.memberRepository");
         return new MemoryMemberRepository();
     }
 
@@ -51,6 +78,7 @@ public class AppConfig {
 
     @Bean
     public OrderService orderService() {
+        System.out.println("call AppConfig.orderService");
         return new OrderServiceImpl(memberRepository(), discountPolicy());
     }
 
