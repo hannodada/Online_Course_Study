@@ -22,7 +22,7 @@ public MemberRepository memberRepository() {
      기존 로직을 호출해서 MemoryMemberRepository를 생성하고 스프링 컨테이너에 등록
      return 반환
      }
-}
+}   ㅁㅋ
 *
 * */
 
