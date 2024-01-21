@@ -16,8 +16,9 @@ import org.springframework.context.annotation.FilterType;
 // @ComponentScan은 @Component가 붙은 클래스를 모두 확인해서 빈으로 등록해준다.
 public class AutoAppConfig {
 
+/*
     @Bean(name = "memoryMemberRepository")
     MemberRepository memberRepository(){
         return new MemoryMemberRepository();
-    }
+    }*/
 }
