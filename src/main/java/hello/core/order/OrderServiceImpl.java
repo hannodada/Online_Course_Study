@@ -1,11 +1,24 @@
 package hello.core.order;
 
+import hello.core.annotation.MainDiscountPolicy;
 import hello.core.discount.DiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
+//@RequiredArgsConstructor
+/*
+* @RequiredArgsConstructor : final로 선언된 필수값인 애들의 생성자를 자동으로 만들어줌
+*
+    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    }
+* */
 public class OrderServiceImpl implements OrderService {
     // private final MemberRepository memberRepository = new MemoryMemberRepository();
 
@@ -33,17 +46,24 @@ public class OrderServiceImpl implements OrderService {
     private final MemberRepository memberRepository;
     private final DiscountPolicy discountPolicy;
 
+    //@Autowired  private final MemberRepository memberRepository;
+    // 필드 주입을 하면 간단하게 쓸수 있다.
+    // 하지만! 외부에서 변경이 불가능해 테스트 하기 어렵다.
+    // 테스트 하려면 setter 만들어야 함
+    // 근데 어차피 setter 만들거면 그냥 setter주입을 하는게 나음
+    @Autowired
+    public OrderServiceImpl(MemberRepository memberRepository, @MainDiscountPolicy DiscountPolicy discountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    }
     /*해결 방법 2.
     * 누군가 클라이언트인 OrderServiceImpl에 DiscountPolicy의 구현 객체를 대신 생성하고 주입해주어야한다.
     * AppConfig 생성
     * AppConfig : 애플리케이션의 전체 동작 방식을 구성(Config) 하기 위해,
     *             `구현 객체를 생성`하고 ,`연결` 하는 책임을 가지는 별도의 설정 클래스
     */
+    // 생성자가 딱 1개만 있으면 @Autowired를 생략해도 자동 주입 된다. 물론 스프링 빈에만 해당
 
-    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-        this.memberRepository = memberRepository;
-        this.discountPolicy = discountPolicy;
-    }
 
     @Override
     public Order createOrder(Long memberId, String itemName, int itemPrice) {
